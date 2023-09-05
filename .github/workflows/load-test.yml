@@ -32,6 +32,6 @@ jobs:
       - name: Run cloud k6 test
         uses: grafana/k6-action@v0.3.0
         with:
-          filename: test.js
+          filename: byo-flow-load-test.js
           cloud: true
           token: ${{ secrets.K6_CLOUD_API_TOKEN }}
