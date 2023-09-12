@@ -1,26 +1,43 @@
-import { sleep, group } from 'k6'
-import http from 'k6/http'
-import jsonpath from 'https://jslib.k6.io/jsonpath/1.0.2/index.js'
+import { sleep, group } from 'k6';
+import http from 'k6/http';
+import jsonpath from 'https://jslib.k6.io/jsonpath/1.0.2/index.js';
+import { check } from 'k6';
+
 
 export const options = {
+
+ //Configure cloud options in the options.ext.loadimpact object:
+ // Cloud execution has a few extra options, including to distribute load across different regions or to change projects. These cloud options are not required.
+
   ext: {
     loadimpact: {
       distribution: { 'amazon:us:ashburn': { loadZone: 'amazon:us:ashburn', percent: 100 } },
       apm: [],
+      // Project: Default project
+      //projectID: 3656414,
+      // Test runs with the same name groups test runs together
+      name: 'BYO TEST SCRIPT'
     },
   },
   thresholds: {
     http_req_failed: ['rate<0.01'], // http errors should be less than 1%
     http_req_duration: ['p(95)<500'], // 95 percent of response times must be below 900ms
   },
-  scenarios: {
+
+
+  //In k6, you can configure both logic and load in a scenario.Scenarios will help you model realistic load tests.
+  // realistic load test should account for both the behavior of its virtual users and the load that these users put on your application.
+
+  //scenarios:  1 scenario, 1 max VUs, 4m0s max duration (incl. graceful stop):
+  //* Scenario_1: Up to 1 looping VUs for 3m0s over 3 stages (gracefulRampDown: 1m0s, exec: scenario_1, gracefulStop: 1m0s)
+scenarios: {
     Scenario_1: {
       executor: 'ramping-vus',
       gracefulStop: '60s',
       stages: [
-        { target: 20, duration: '1m' },
-        { target: 20, duration: '3m30s' },
-        { target: 0, duration: '1m' },
+        { target: 1, duration: '1m' }, // traffic ramp-up from 1 to n users over x minutes.
+        { target: 1, duration: '1m' }, // stay at n users for x minutes
+        { target: 0, duration: '1m' }, // ramp-down to 0 users
       ],
       gracefulRampDown: '60s',
       exec: 'scenario_1',
@@ -42,6 +59,10 @@ export function scenario_1() {
         'sec-ch-ua-platform': '"macOS"',
       },
     })
+
+    check(response, {
+        'is status 200': r => r.status === 200,
+      })
 
     response = http.get('https://web-testing.upstart.com/333.ad42ca0bdfbb4e9868cd.js', {
       headers: {
@@ -234,6 +255,7 @@ export function scenario_1() {
       },
     })
 
+
     response = http.get('https://web-testing.upstart.com/VerifyEmail.6c915d37c24046d96dbd.js', {
       headers: {
         'sec-ch-ua': '"Chromium";v="116", "Not)A;Brand";v="24", "Google Chrome";v="116"',
@@ -371,7 +393,9 @@ export function scenario_1() {
         'x-datadog-sampling-priority': '1',
         'x-datadog-trace-id': '8041259224924112841',
       },
-    })
+      tags: { name: 'getWebsiteURL' },
+    },
+    )
 
     response = http.options('https://testing-autoretail-api.upstart.com/websites/bosak-kia', null, {
       headers: {
@@ -439,16 +463,6 @@ export function scenario_1() {
       },
     })
 
-    response = http.get(
-      'https://cdn.cookielaw.org/consent/01e8d177-940c-4e5e-9c89-cc14b6c6e74d-test/77d92d26-5ccf-44cb-89bd-890fdc8ed7fc/en.json',
-      {
-        headers: {
-          'sec-ch-ua': '"Chromium";v="116", "Not)A;Brand";v="24", "Google Chrome";v="116"',
-          'sec-ch-ua-mobile': '?0',
-          'sec-ch-ua-platform': '"macOS"',
-        },
-      }
-    )
   })
 
   group(
@@ -562,6 +576,11 @@ export function scenario_1() {
           },
         }
       )
+
+      check(response, {
+        'is status 200': r => r.status === 200,
+      })
+
 
       response = http.get(
         'https://cdn.cookielaw.org/scripttemplates/202302.1.0/assets/otFlat.json',
@@ -1615,6 +1634,10 @@ export function scenario_1() {
           origin: 'https://web-testing.upstart.com',
           'sec-fetch-mode': 'cors',
         },
+      })
+
+      check(response, {
+        'is status 204': r => r.status === 204,
       })
 
      
