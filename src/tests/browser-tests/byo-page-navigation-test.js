@@ -2,7 +2,7 @@ import { browser } from "k6/experimental/browser";
 import { check, sleep } from "k6";
 //import jsonpath from 'https://jslib.k6.io/jsonpath/1.0.2/index.js';
 //import { expect } from 'https://jslib.k6.io/k6chaijs/4.3.4.0/index.js';
-import { htmlReport } from "https://raw.githubusercontent.com/benc-uk/k6-reporter/2.4.0/dist/bundle.js";
+//import { htmlReport } from "https://raw.githubusercontent.com/benc-uk/k6-reporter/2.4.0/dist/bundle.js";
 
 
 //import { BYOpage } from './byo-page-navigation.js';
@@ -27,6 +27,7 @@ The ui_ramping_vus_scenario ramps up gradually based and stays with the x VUs fo
       },
     },
 
+    /*
     ui_per_vu_scenario: {
       executor: "per-vu-iterations",
       vus: 1,
@@ -38,7 +39,7 @@ The ui_ramping_vus_scenario ramps up gradually based and stays with the x VUs fo
         },
       },
     },
-
+*/
     /*
     ui_ramping_vus_scenario: {
       executor: 'ramping-vus',
@@ -133,8 +134,9 @@ export default async function () {
 
 }
 
-  export function handleSummary(data) {
+/*  export function handleSummary(data) {
     return {
         './dashboards/reports/BYOReport.html': htmlReport(data, { debug: true })
     };
-}
+  }
+*/
