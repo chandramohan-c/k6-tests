@@ -45,8 +45,8 @@ The ui_ramping_vus_scenario ramps up gradually based and stays with the x VUs fo
       executor: 'ramping-vus',
       gracefulStop: '10s',
       stages: [
-        { target: 100, duration: '50s' }, // traffic ramp-up from 1 to n users over x minutes/seconds.
-        { target: 100, duration: '5m' }, // stay at n users for x minutes
+        { target: 50, duration: '50s' }, // traffic ramp-up from 1 to n users over x minutes/seconds.
+        { target: 50, duration: '5m' }, // stay at n users for x minutes
         { target: 0, duration: '10s' }, // ramp-down to 0 users
       ],
       gracefulRampDown: '10s',
