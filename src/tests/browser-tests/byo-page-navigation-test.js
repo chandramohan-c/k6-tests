@@ -1,18 +1,21 @@
 import { browser } from "k6/experimental/browser";
 import { check, sleep } from "k6";
 //import jsonpath from 'https://jslib.k6.io/jsonpath/1.0.2/index.js';
-//import { expect } from 'https://jslib.k6.io/k6chaijs/4.3.4.0/index.js'
+//import { expect } from 'https://jslib.k6.io/k6chaijs/4.3.4.0/index.js';
+import { htmlReport } from "https://raw.githubusercontent.com/benc-uk/k6-reporter/2.4.0/dist/bundle.js";
+
 
 //import { BYOpage } from './byo-page-navigation.js';
 
 export const options = {
-  /*This script combines two scenarios, with sequencing:
+  /*This script combines three scenarios, with sequencing:
 The ui_shared_iter_scenario starts immediately. X VUs try to use n iterations as quickly as possible (some VUs may use more iterations than others).
 The ui_per_vu_scenario starts after 10s. In this case, x VUs each run n iterations. 
+The ui_ramping_vus_scenario ramps up gradually based and stays with the x VUs for specific period of time, before ramping down.
 */
 
   scenarios: {
-    /* ui_shared_iter_scenario: {
+     ui_shared_iter_scenario: {
       executor: 'shared-iterations',
       vus: 1,
       iterations: 1,
@@ -23,7 +26,7 @@ The ui_per_vu_scenario starts after 10s. In this case, x VUs each run n iteratio
         },
       },
     },
-*/
+
     ui_per_vu_scenario: {
       executor: "per-vu-iterations",
       vus: 1,
@@ -127,4 +130,11 @@ export default async function () {
     page.close();
     context.close();
   }
+
+}
+
+  export function handleSummary(data) {
+    return {
+        './dashboards/reports/BYOReport.html': htmlReport(data, { debug: true })
+    };
 }
