@@ -40,16 +40,16 @@ The ui_ramping_vus_scenario ramps up gradually based and stays with the x VUs fo
       },
     },
 */
-    /*
+   
     ui_ramping_vus_scenario: {
       executor: 'ramping-vus',
-      gracefulStop: '60s',
+      gracefulStop: '10s',
       stages: [
-        { target: 1, duration: '1m' }, // traffic ramp-up from 1 to n users over x minutes.
-        { target: 1, duration: '1m' }, // stay at n users for x minutes
-        { target: 0, duration: '1m' }, // ramp-down to 0 users
+        { target: 100, duration: '50s' }, // traffic ramp-up from 1 to n users over x minutes/seconds.
+        { target: 100, duration: '5m' }, // stay at n users for x minutes
+        { target: 0, duration: '10s' }, // ramp-down to 0 users
       ],
-      gracefulRampDown: '60s',
+      gracefulRampDown: '10s',
       //exec: 'ui_ramping_vus_scenario',
       options: {
         browser: {
@@ -57,7 +57,7 @@ The ui_ramping_vus_scenario ramps up gradually based and stays with the x VUs fo
         },
       },
     },
-    */
+    
   },
 
   thresholds: {
@@ -117,16 +117,15 @@ export default async function () {
           .textContent() == "Exterior Color",
     });
 
-    //sleep(4);
-
-    //const submitFinishButton = page.locator('//button[text()="Finish Build"]');
-    //await Promise.all([page.waitForNavigation(), submitFinishButton.click()]);
-
-    page.locator('//button[text()="Finish Build"]').click();
+    
+    const submitFinishButton = page.locator('//button[text()="Finish Build"]');
+    await Promise.all([page.waitForNavigation(), submitFinishButton.click()]);
+    
+    //sleep(1);
+    //page.locator('//button[text()="Finish Build"]').click();
 
     page.screenshot({ path: "./assets/byo_page_step4.png" });
 
-    //sleep(4);
   } finally {
     page.close();
     context.close();
