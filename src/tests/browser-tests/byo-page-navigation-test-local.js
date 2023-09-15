@@ -2,8 +2,10 @@ import { browser } from "k6/experimental/browser";
 import { check, sleep } from "k6";
 //import jsonpath from 'https://jslib.k6.io/jsonpath/1.0.2/index.js';
 //import { expect } from 'https://jslib.k6.io/k6chaijs/4.3.4.0/index.js';
-//import { htmlReport } from "https://raw.githubusercontent.com/benc-uk/k6-reporter/2.4.0/dist/bundle.js";
+import { htmlReport } from "https://raw.githubusercontent.com/benc-uk/k6-reporter/2.4.0/dist/bundle.js";
 
+
+//import { BYOpage } from './byo-page-navigation.js';
 
 export const options = {
 
@@ -95,25 +97,31 @@ export default async function () {
         "Select a Model",
     });
 
-    await page.locator('(//div[@class="button-div BYOModelOptions"])[1]').click();
+    await page.locator('//div[@class="button-div BYOModelOptions"][1]').click();
 
+    //const submitButton = page.locator('//*/button[@type="submit"]');
 
     await page.locator('//button[@type="submit"]').click();
 
-    //const submitButton = page.locator('//*/button[@type="submit"]');
     //await Promise.all([page.waitForNavigation(), submitButton.click()]);
+    page.screenshot({ path: "./assets/byo_page_step2.png" });
 
     check(page, {
       header: (p) =>
         p.locator('//h2[text()="Select a Trim"]').textContent() ==
         "Select a Trim",
     });
+
+    //const submitTrimButton = page.locator('//div[@class="BYOTrimsContainer"]/following-sibling::div/button[@type="submit"]');
     
     await page
       .locator(
         '//div[@class="BYOTrimsContainer"]/following-sibling::div/button[@type="submit"]'
       )
       .click();
+
+    //await Promise.all([page.waitForNavigation(), submitTrimButton.click()]);
+    page.screenshot({ path: "./assets/byo_page_step3.png" });
 
     check(page, {
       header: (p) =>
@@ -123,8 +131,17 @@ export default async function () {
           )
           .textContent() == "Exterior Color",
     });
+
+    
+    //const submitFinishButton = page.locator('//button[text()="Finish Build"]');
+    //await Promise.all([page.waitForNavigation(), submitFinishButton.click()]);
     
     await page.locator('//button[text()="Finish Build"]').click();
+
+
+    //sleep(1);
+
+    page.screenshot({ path: "./assets/byo_page_step4.png" });
 
 
     console.log(" ========================================== end of test execution id :  " +executionId + "  ============================================= ");
@@ -135,3 +152,11 @@ export default async function () {
   }
 
 }
+
+// generate test run metrics
+ export function handleSummary(data) {
+    return {
+        './dashboards/reports/BYOReport.html': htmlReport(data, { debug: true })
+    };
+  }
+

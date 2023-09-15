@@ -24,14 +24,16 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v1
 
-     # - name: Run local k6 test
-     #  uses: grafana/k6-action@v0.3.0
-     #  with:
-     #    filename: test.js
-
-      - name: Run cloud k6 test
+      - name: Run local k6 test
         uses: grafana/k6-action@v0.3.0
         with:
-          filename: ./src/tests/browser-tests/byo-page-navigation-test.js
-          cloud: true
-          token: ${{ secrets.K6_CLOUD_API_TOKEN }}
+         filename: ./src/tests/browser-tests/kia-rsvn-page-navigation-test.js
+
+    
+    #  - name: Run cloud k6 test
+    #   uses: grafana/k6-action@v0.3.0
+    #    with:
+    #      filename: ./src/tests/browser-tests/kia-rsvn-page-navigation-test.js
+    #      cloud: true
+    #      token: ${{ secrets.K6_CLOUD_API_TOKEN }}
+      
