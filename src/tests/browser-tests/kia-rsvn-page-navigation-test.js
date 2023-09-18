@@ -52,9 +52,9 @@ export const options = {
       executor: 'ramping-vus',
       gracefulStop: '10s',
       stages: [
-        { target: 1, duration: '1m' }, // traffic ramp-up from 1 to n users over x minutes/seconds.
-        { target: 1, duration: '1m' }, // stay at n users for x minutes
-        { target: 0, duration: '30s' }, // ramp-down to 0 users
+        { target: 100, duration: '1m' }, // traffic ramp-up from 1 to n users over x minutes/seconds.
+        { target: 100, duration: '10m' }, // stay at n users for x minutes
+        { target: 0, duration: '1m' }, // ramp-down to 0 users
       ],
       gracefulRampDown: '10s',
       //exec: 'ui_ramping_vus_scenario',
