@@ -22,11 +22,16 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v1
+        uses: actions/checkout@v3
+      
+      - name: Install dependencies
+        run: |
+          npm ci
+          go install go.k6.io/xk6/cmd/xk6@latest
+          xk6 build --output xk6-browser --with github.com/grafana/xk6-browser
 
       - name: Run local k6 test
-        uses: grafana/k6-action@v0.3.0
-        with:
+        run: |
          filename: ./src/tests/browser-tests/kia-rsvn-page-navigation-test.js
          flags: --out json=load-tests-results.json
 
