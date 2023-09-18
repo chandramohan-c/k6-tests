@@ -31,6 +31,7 @@ export const options = {
 
  //The ui_per_vu_scenario starts after 10s. In this case, x VUs each run n iterations. 
 
+ /*
     ui_per_vu_scenario: {
       executor: "per-vu-iterations",
       vus: 1,
@@ -43,17 +44,17 @@ export const options = {
       },
     },
    
-
+*/
   //The ui_ramping_vus_scenario ramps up gradually based and stays with the x VUs for specific period of time, before ramping down.
 
-  /*
+  
     ui_ramping_vus_scenario: {
       executor: 'ramping-vus',
       gracefulStop: '10s',
       stages: [
-        { target: 50, duration: '50s' }, // traffic ramp-up from 1 to n users over x minutes/seconds.
-        { target: 50, duration: '5m' }, // stay at n users for x minutes
-        { target: 0, duration: '10s' }, // ramp-down to 0 users
+        { target: 1, duration: '1m' }, // traffic ramp-up from 1 to n users over x minutes/seconds.
+        { target: 1, duration: '1m' }, // stay at n users for x minutes
+        { target: 0, duration: '30s' }, // ramp-down to 0 users
       ],
       gracefulRampDown: '10s',
       //exec: 'ui_ramping_vus_scenario',
@@ -64,7 +65,7 @@ export const options = {
       },
     },
     
-    */
+   
   },
 
 
@@ -226,7 +227,7 @@ console.log("============== end of test execution id :  " +executionId + "  ====
 // generate test run metrics
 export function handleSummary(data) {
   return {
-      'BYOReport.html': htmlReport(data, { debug: true })
+      'KRSN-Load-Tests-Report.html': htmlReport(data, { debug: true })
   };
 }
 
